@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Akiba Store - Anime y Cultura Japonesa</title>
+  <link rel="stylesheet" href="styles.css?v=leyendas-japonesas-2" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">AK</span>
+      <div>
+        <h1>Akiba Store</h1>
+        <p>Anime, manga y cultura japonesa</p>
+      </div>
+    </div>
+    <nav>
+      <a href="#productos">Productos</a>
+      <a href="#carrito">Carrito</a>
+      <a href="pedidos.html">Pedidos guardados</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <p class="eyebrow">Torii anime shop</p>
+        <h2>Un pedacito de Japon para fans del anime.</h2>
+        <p>
+          Figuras, manga, snacks y accesorios inspirados en templos, leyendas y
+          noches de festival japones.
+        </p>
+        <a class="primary-link" href="#productos">Ver productos</a>
+      </div>
+    </section>
+
+    <section id="productos" class="section catalog-section">
+      <div class="section-heading">
+        <p class="eyebrow">Catalogo</p>
+        <h2>Elige una categoria</h2>
+      </div>
+
+      <div class="category-tabs" aria-label="Categorias de productos">
+        <button class="category-button active" type="button" data-category="figuras">Figuras</button>
+        <button class="category-button" type="button" data-category="manga">Manga</button>
+        <button class="category-button" type="button" data-category="snacks">Snacks</button>
+        <button class="category-button" type="button" data-category="ropa">Ropa japonesa</button>
+        <button class="category-button" type="button" data-category="accesorios">Accesorios</button>
+      </div>
+
+      <div class="catalog-title">
+        <h3 id="categoryTitle">Figuras</h3>
+        <p id="categoryDescription">Figuras coleccionables para decorar tu habitacion o vitrina.</p>
+      </div>
+
+      <div id="productGrid" class="product-grid"></div>
+    </section>
+
+    <section id="carrito" class="section cart-section">
+      <div class="section-heading">
+        <p class="eyebrow">Carrito</p>
+        <h2>Tu pedido kawaii</h2>
+      </div>
+
+      <div class="cart-layout">
+        <div class="cart-panel">
+          <div id="cartItems" class="cart-items"></div>
+          <div class="cart-total">
+            <span>Total</span>
+            <strong id="cartTotal">$0.00</strong>
+          </div>
+          <button id="showCheckout" class="secondary-button" type="button">Realizar pedido</button>
+        </div>
+
+        <form id="orderForm" class="order-form hidden">
+          <div class="form-intro">
+            <p class="eyebrow">Registro</p>
+            <h3>Datos antes de comprar</h3>
+          </div>
+
+          <label>
+            Nombre del cliente
+            <input type="text" name="cliente" placeholder="Ej. Sakura Tanaka" required />
+          </label>
+
+          <label>
+            Correo electronico
+            <input type="email" name="correo" placeholder="cliente@email.com" required />
+          </label>
+
+          <label>
+            Telefono
+            <input type="tel" name="telefono" placeholder="Ej. 0999999999" required />
+          </label>
+
+          <label>
+            Ciudad
+            <input type="text" name="ciudad" placeholder="Ej. Quito" required />
+          </label>
+
+          <label class="full">
+            Direccion de envio
+            <textarea name="direccion" rows="4" placeholder="Ciudad, calle, referencia" required></textarea>
+          </label>
+
+          <button type="submit">Confirmar compra</button>
+          <p id="formMessage" class="form-message" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+    <section id="pedidoCliente" class="section client-order-section hidden">
+      <div class="section-heading">
+        <p class="eyebrow">Pedido actual</p>
+        <h2>Resumen de tu compra</h2>
+      </div>
+      <div id="clientOrderSummary" class="client-order-summary"></div>
+    </section>
+  </main>
+
+  <div id="kawaiiMessage" class="kawaii-message hidden" role="status" aria-live="polite">
+    <strong>Arigato!</strong>
+    <span>Tu pedido kawaii fue realizado con exito.</span>
+  </div>
+
+  <footer id="contacto">
+    <p>Akiba Store - Anime, manga y cultura japonesa.</p>
+  </footer>
+
+  <script src="app.js?v=carrito-formulario-4"></script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pedidos guardados - Akiba Store</title>
+  <link rel="stylesheet" href="styles.css?v=leyendas-japonesas-2" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">AK</span>
+      <div>
+        <h1>Akiba Store</h1>
+        <p>Historial de pedidos</p>
+      </div>
+    </div>
+    <nav>
+      <a href="index.html">Tienda</a>
+      <a href="index.html#carrito">Carrito</a>
+      <a href="#pedidos">Pedidos guardados</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="pedidos" class="section orders-section">
+      <div class="section-heading">
+        <p class="eyebrow">Base de datos</p>
+        <h2>Pedidos guardados</h2>
+      </div>
+      <button id="loadOrders" class="secondary-button" type="button">Cargar pedidos</button>
+      <div id="ordersList" class="orders-list"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Akiba Store - Pedidos almacenados en MySQL.</p>
+  </footer>
+
+  <script src="pedidos.js?v=historial-1"></script>
+</body>
+</html>
