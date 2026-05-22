@@ -146,7 +146,8 @@ const cartItems = document.querySelector("#cartItems");
 const cartTotal = document.querySelector("#cartTotal");
 const showCheckoutButton = document.querySelector("#showCheckout");
 const kawaiiMessage = document.querySelector("#kawaiiMessage");
-const apiBaseUrl = "http://localhost/akiba-store/";
+const isStaticDemo = window.location.hostname.includes("github.io");
+const apiBaseUrl = isStaticDemo ? "" : "http://localhost/akiba-store/";
 const clientOrderSection = document.querySelector("#pedidoCliente");
 const clientOrderSummary = document.querySelector("#clientOrderSummary");
 
@@ -188,7 +189,15 @@ orderForm.addEventListener("submit", async (event) => {
   try {
     const purchasedItems = [...cart];
 
+    if (isStaticDemo) {
+      saveStaticDemoOrder(customerData, purchasedItems);
+    }
+
     for (const item of purchasedItems) {
+      if (isStaticDemo) {
+        continue;
+      }
+
       const formData = new FormData();
       formData.append("cliente", customerData.get("cliente"));
       formData.append("correo", customerData.get("correo"));
@@ -327,6 +336,29 @@ function renderClientOrder(customerData, items) {
 
   clientOrderSection.classList.remove("hidden");
   clientOrderSection.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function saveStaticDemoOrder(customerData, items) {
+  const savedOrders = JSON.parse(localStorage.getItem("akibaOrders") || "[]");
+  const now = new Date().toLocaleString();
+
+  items.forEach((item) => {
+    savedOrders.unshift({
+      id: Date.now() + Math.floor(Math.random() * 1000),
+      cliente: customerData.get("cliente"),
+      correo: customerData.get("correo"),
+      telefono: customerData.get("telefono"),
+      ciudad: customerData.get("ciudad"),
+      producto: item.name,
+      cantidad: item.quantity,
+      precio_unitario: item.price,
+      total: item.price * item.quantity,
+      direccion: customerData.get("direccion"),
+      fecha_creacion: now
+    });
+  });
+
+  localStorage.setItem("akibaOrders", JSON.stringify(savedOrders));
 }
 
 function showKawaiiMessage(title, text) {

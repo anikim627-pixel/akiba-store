@@ -1,4 +1,5 @@
-const apiBaseUrl = "http://localhost/akiba-store/";
+const isStaticDemo = window.location.hostname.includes("github.io");
+const apiBaseUrl = isStaticDemo ? "" : "http://localhost/akiba-store/";
 const loadOrdersButton = document.querySelector("#loadOrders");
 const ordersList = document.querySelector("#ordersList");
 
@@ -7,6 +8,11 @@ loadOrders();
 
 async function loadOrders() {
   ordersList.innerHTML = "<p>Cargando pedidos...</p>";
+
+  if (isStaticDemo) {
+    renderOrders(JSON.parse(localStorage.getItem("akibaOrders") || "[]"));
+    return;
+  }
 
   try {
     const response = await fetch(`${apiBaseUrl}listar_pedidos.php?limite=50`, {
@@ -20,31 +26,7 @@ async function loadOrders() {
       throw new Error(result.message || "No se pudieron cargar los pedidos.");
     }
 
-    if (result.data.length === 0) {
-      ordersList.innerHTML = "<p>No hay pedidos registrados todavia.</p>";
-      return;
-    }
-
-    ordersList.innerHTML = result.data.map((pedido) => `
-      <article class="order-item">
-        <h3>${escapeHtml(pedido.producto)}</h3>
-        <p><strong>ID:</strong> ${pedido.id}</p>
-        <p><strong>Cliente:</strong> ${escapeHtml(pedido.cliente)}</p>
-        <p><strong>Correo:</strong> ${escapeHtml(pedido.correo)}</p>
-        <p><strong>Telefono:</strong> ${escapeHtml(pedido.telefono || "No registrado")}</p>
-        <p><strong>Ciudad:</strong> ${escapeHtml(pedido.ciudad || "No registrada")}</p>
-        <p><strong>Cantidad:</strong> ${pedido.cantidad}</p>
-        <p><strong>Precio:</strong> $${Number(pedido.precio_unitario || 0).toFixed(2)}</p>
-        <p><strong>Total:</strong> $${Number(pedido.total || 0).toFixed(2)}</p>
-        <p><strong>Direccion:</strong> ${escapeHtml(pedido.direccion)}</p>
-        <p><strong>Fecha:</strong> ${escapeHtml(pedido.fecha_creacion)}</p>
-        <button class="delete-order-button" type="button" data-id="${pedido.id}">Eliminar pedido</button>
-      </article>
-    `).join("");
-
-    ordersList.querySelectorAll(".delete-order-button").forEach((button) => {
-      button.addEventListener("click", () => deleteOrder(button.dataset.id));
-    });
+    renderOrders(result.data);
   } catch (error) {
     ordersList.innerHTML = `<p>${escapeHtml(error.message)}</p>`;
   }
@@ -54,6 +36,14 @@ async function deleteOrder(id) {
   const confirmed = window.confirm(`Deseas eliminar el pedido #${id}?`);
 
   if (!confirmed) {
+    return;
+  }
+
+  if (isStaticDemo) {
+    const savedOrders = JSON.parse(localStorage.getItem("akibaOrders") || "[]")
+      .filter((pedido) => String(pedido.id) !== String(id));
+    localStorage.setItem("akibaOrders", JSON.stringify(savedOrders));
+    renderOrders(savedOrders);
     return;
   }
 
@@ -77,6 +67,34 @@ async function deleteOrder(id) {
   } catch (error) {
     ordersList.innerHTML = `<p>${escapeHtml(error.message)}</p>`;
   }
+}
+
+function renderOrders(orders) {
+  if (orders.length === 0) {
+    ordersList.innerHTML = "<p>No hay pedidos registrados todavia.</p>";
+    return;
+  }
+
+  ordersList.innerHTML = orders.map((pedido) => `
+    <article class="order-item">
+      <h3>${escapeHtml(pedido.producto)}</h3>
+      <p><strong>ID:</strong> ${pedido.id}</p>
+      <p><strong>Cliente:</strong> ${escapeHtml(pedido.cliente)}</p>
+      <p><strong>Correo:</strong> ${escapeHtml(pedido.correo)}</p>
+      <p><strong>Telefono:</strong> ${escapeHtml(pedido.telefono || "No registrado")}</p>
+      <p><strong>Ciudad:</strong> ${escapeHtml(pedido.ciudad || "No registrada")}</p>
+      <p><strong>Cantidad:</strong> ${pedido.cantidad}</p>
+      <p><strong>Precio:</strong> $${Number(pedido.precio_unitario || 0).toFixed(2)}</p>
+      <p><strong>Total:</strong> $${Number(pedido.total || 0).toFixed(2)}</p>
+      <p><strong>Direccion:</strong> ${escapeHtml(pedido.direccion)}</p>
+      <p><strong>Fecha:</strong> ${escapeHtml(pedido.fecha_creacion)}</p>
+      <button class="delete-order-button" type="button" data-id="${pedido.id}">Eliminar pedido</button>
+    </article>
+  `).join("");
+
+  ordersList.querySelectorAll(".delete-order-button").forEach((button) => {
+    button.addEventListener("click", () => deleteOrder(button.dataset.id));
+  });
 }
 
 async function readJsonResponse(response) {
